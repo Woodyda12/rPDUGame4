@@ -301,7 +301,7 @@
             obstacles.push(obs);
 
             // Schedule next obstacle - much faster spawning with progressive speed
-            const minDelay = 300; // minimum 0.3 seconds between obstacles
+            const minDelay = 200; // minimum 0.2 seconds between obstacles
             const maxDelay = 800; // maximum delay
             const speedReduction = Math.min(400, score / 20); // reduce delay based on score
             const baseDelay = Math.max(minDelay, maxDelay - speedReduction);
