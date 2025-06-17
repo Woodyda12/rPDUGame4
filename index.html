@@ -41,7 +41,47 @@
           font: bold 32px/1.3 sans-serif;
           text-align: center;
         }
-        .hidden { 
+        #titleScreen {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.95);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: #00ff00;
+          font: bold 24px sans-serif;
+          text-align: center;
+          z-index: 50;
+        }
+        #assetList {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 20px;
+          margin: 20px 0;
+        }
+        .asset {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .asset img {
+          width: 64px;
+          height: 64px;
+          margin-bottom: 5px;
+        }
+        #startButton {
+          margin-top: 20px;
+          padding: 10px 20px;
+          font-size: 24px;
+          font-weight: bold;
+          background: #00ff00;
+          color: #000;
+          border: none;
+          cursor: pointer;
+        }
+        .hidden {
           display: none !important;         /* force hide with !important */
         }
 
@@ -81,6 +121,17 @@
 </head>
 <body>
     <div id="loading">Loading Grid Glider...</div>
+    <div id="titleScreen" class="hidden">
+        <h1>Grid Glider – Design for Cost Edition</h1>
+        <div id="assetList">
+            <div class="asset"><img src="assets/obstacle1.png" alt="More Spend"><div class="assetLabel">More Spend</div></div>
+            <div class="asset"><img src="assets/obstacle2.png" alt="Unnecessary Cuts"><div class="assetLabel">Unnecessary Cuts</div></div>
+            <div class="asset"><img src="assets/obstacle3.png" alt="Item Complexity"><div class="assetLabel">Item Complexity</div></div>
+            <div class="asset"><img src="assets/obstacle4.png" alt="Unforeseen Expenses"><div class="assetLabel">Unforeseen Expenses</div></div>
+            <div class="asset"><img src="assets/obstacle5.png" alt="No Direction"><div class="assetLabel">No Direction</div></div>
+        </div>
+        <button id="startButton">Start</button>
+    </div>
     <div id="overlay" class="hidden">
         <div>
             <div id="finalScore">Score: 0</div>
@@ -115,6 +166,13 @@
         const overlay  = document.getElementById('overlay');
         const loading  = document.getElementById('loading');
         const finalScoreDiv = document.getElementById('finalScore');
+        const titleScreen = document.getElementById('titleScreen');
+        const startButton = document.getElementById('startButton');
+
+        startButton.addEventListener('click', () => {
+            titleScreen.classList.add('hidden');
+            startGame();
+        });
 
         // ----- Fallback colors for obstacles -------------------------------
         const obstacleColors = [
@@ -226,9 +284,9 @@
 
                 // Hide loading screen
                 loading.style.display = 'none';
-                
-                // Start the game
-                startGame();
+
+                // Show title screen
+                titleScreen.classList.remove('hidden');
 
                 console.log('Grid Glider initialized successfully!');
 
