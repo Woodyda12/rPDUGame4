@@ -32,16 +32,18 @@
         #overlay {
           position: fixed;
           inset: 0;                         /* top/right/bottom/left = 0 */
-          background: rgba(0, 0, 0, 0.75);  /* translucent black */
+          background: rgba(0, 0, 0, 0.85);  /* darker translucent black */
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 10;
+          z-index: 100;                     /* higher z-index */
           color: #ff3366;                   /* neon magenta text */
           font: bold 32px/1.3 sans-serif;
           text-align: center;
         }
-        .hidden { display: none; }
+        .hidden { 
+          display: none !important;         /* force hide with !important */
+        }
 
         /* Loading indicator */
         #loading {
@@ -174,28 +176,28 @@
                 // Renderer
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setClearColor(0x000000);
+                renderer.setClearColor(0x111111); // lighter background
                 document.body.appendChild(renderer.domElement);
 
-                // Basic lighting
-                const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+                // Brighter lighting
+                const ambient = new THREE.AmbientLight(0xffffff, 0.8);
                 scene.add(ambient);
 
-                const directional = new THREE.DirectionalLight(0xffffff, 0.4);
+                const directional = new THREE.DirectionalLight(0xffffff, 0.6);
                 directional.position.set(0, 10, 5);
                 scene.add(directional);
 
-                // Grid floor
-                const grid = new THREE.GridHelper(100, 20, 0x00ff00, 0x00ff00);
+                // Brighter grid floor
+                const grid = new THREE.GridHelper(100, 20, 0x00ff88, 0x00ff88);
                 grid.position.y = 0;
                 scene.add(grid);
 
-                // Player mesh
+                // Player mesh - brighter
                 const playerGeom = new THREE.BoxGeometry(1, 1, 1);
                 const playerMat = new THREE.MeshStandardMaterial({
-                    color: 0x00ff00,
-                    emissive: 0x00ff00,
-                    emissiveIntensity: 0.3
+                    color: 0x00ffaa,
+                    emissive: 0x00ffaa,
+                    emissiveIntensity: 0.4
                 });
                 player = new THREE.Mesh(playerGeom, playerMat);
                 player.position.set(laneX[currentLane], 0.5, 0);
@@ -273,16 +275,16 @@
                 const texture = obstacleTextures[Math.floor(Math.random() * obstacleTextures.length)];
                 mat = new THREE.MeshStandardMaterial({
                     map: texture,
-                    emissive: 0x222222,
-                    emissiveIntensity: 0.5
+                    emissive: 0x444444,
+                    emissiveIntensity: 0.7
                 });
             } else {
-                // Fallback to colored materials
+                // Fallback to colored materials - brighter
                 const color = obstacleColors[Math.floor(Math.random() * obstacleColors.length)];
                 mat = new THREE.MeshStandardMaterial({
                     color: color,
                     emissive: color,
-                    emissiveIntensity: 0.2
+                    emissiveIntensity: 0.4
                 });
             }
             
@@ -298,9 +300,12 @@
             scene.add(obs);
             obstacles.push(obs);
 
-            // Schedule next obstacle (1 – 2.5 s, gets faster over time)
-            const baseDelay = Math.max(500, 1500 - (score / 100));
-            const delay = baseDelay + Math.random() * 1000;
+            // Schedule next obstacle - much faster spawning with progressive speed
+            const minDelay = 300; // minimum 0.3 seconds between obstacles
+            const maxDelay = 800; // maximum delay
+            const speedReduction = Math.min(400, score / 20); // reduce delay based on score
+            const baseDelay = Math.max(minDelay, maxDelay - speedReduction);
+            const delay = baseDelay + Math.random() * 200;
             setTimeout(spawnObstacle, delay);
         }
 
@@ -357,9 +362,9 @@
                     }
                 });
 
-                // Update score & difficulty
-                score += delta * 10;                   // 10 pts / sec
-                speed = Math.min(0.25, 0.10 + (score * 0.00001)); // cap max speed
+                // Update score & difficulty - faster progression
+                score += delta * 15;                   // 15 pts / sec (faster scoring)
+                speed = Math.min(0.35, 0.12 + (score * 0.0001)); // faster base speed, higher cap
                 scoreDiv.textContent = `Score: ${Math.floor(score)}`;
             }
 
@@ -376,11 +381,11 @@
 
             // Reset state
             score = 0;
-            speed = 0.10;
+            speed = 0.12; // faster starting speed
             currentLane = 2;
             player.position.x = laneX[currentLane];
             gameOver = false;
-            overlay.classList.add('hidden');
+            overlay.classList.add('hidden'); // ensure overlay is hidden
 
             // Reset clock & start new obstacle stream
             clock.start();
