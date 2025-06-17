@@ -43,8 +43,8 @@ function init() {
 
     // Load obstacle textures
     const loader = new THREE.TextureLoader();
-    for (let i=1;i<=5;i++) {
-        obstacleTextures.push(loader.load('assets/obstacle'+i+'.png'));
+    for (let i = 1; i <= 5; i++) {
+        obstacleTextures.push(loader.load('assetsobstacle' + i + '.png'));
     }
 
     clock = new THREE.Clock();
