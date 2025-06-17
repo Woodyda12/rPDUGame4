@@ -13,6 +13,7 @@ No installation required. Clone or download this repository and open `index.html
 Avoid oncoming obstacles as they move toward you. Your score increases the longer you survive and the speed slowly ramps up. Colliding with an obstacle ends the run.
 
 ## Assets
-Obstacle textures are provided in this repository as `assetsobstacle1.png` through `assetsobstacle5.png` and are loaded directly by the game.
+Obstacle textures are provided in this repository under the `assets/` directory
+as `obstacle1.png` through `obstacle5.png` and are loaded directly by the game.
 
 Enjoy and feel free to modify or extend the game!
