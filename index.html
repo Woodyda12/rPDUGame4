@@ -183,6 +183,15 @@
             0x00ffff  // cyan
         ];
 
+        // ----- Game over messages for each obstacle type -------------------
+        const gameOverMessages = [
+            "Game Over: More Spend decreased your margin",
+            "Game Over: Unnecessary Cuts added more time to the project", 
+            "Game Over: Item Complexity strikes again",
+            "Game Over: Unforeseen Expenses cost you the win",
+            "Game Over: No Direction inflated your cost and time"
+        ];
+
         // ------------------------------------------------------------------
         //  Load textures with fallback
         // ------------------------------------------------------------------
@@ -339,10 +348,11 @@
             const geom = new THREE.BoxGeometry(size, size, size);
             
             let mat;
+            const obstacleType = Math.floor(Math.random() * 5); // 0-4 for obstacle types
             
             // Use loaded textures if available, otherwise use colors
             if (texturesLoaded && obstacleTextures.length > 0) {
-                const texture = obstacleTextures[Math.floor(Math.random() * obstacleTextures.length)];
+                const texture = obstacleTextures[obstacleType % obstacleTextures.length];
                 mat = new THREE.MeshStandardMaterial({
                     map: texture,
                     emissive: 0x444444,
@@ -350,7 +360,7 @@
                 });
             } else {
                 // Fallback to colored materials - brighter
-                const color = obstacleColors[Math.floor(Math.random() * obstacleColors.length)];
+                const color = obstacleColors[obstacleType];
                 mat = new THREE.MeshStandardMaterial({
                     color: color,
                     emissive: color,
@@ -359,6 +369,7 @@
             }
             
             const obs = new THREE.Mesh(geom, mat);
+            obs.userData.obstacleType = obstacleType; // Store the obstacle type
 
             // Position far ahead in random lane
             obs.position.set(
@@ -434,6 +445,7 @@
                     if (distance < (playerBounds.size + obstacleBounds.size) / 2) {
                         gameOver = true;
                         finalScoreDiv.textContent = `Final Score: ${Math.floor(score)}`;
+                        document.getElementById('gameOverText').innerHTML = gameOverMessages[o.userData.obstacleType] + '<br>Press R to Restart';
                         overlay.classList.remove('hidden');
                     }
                 });
