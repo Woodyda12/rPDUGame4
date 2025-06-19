@@ -255,14 +255,14 @@
                 // Renderer
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setClearColor(0x111111); // lighter background
+                renderer.setClearColor(0x000000); // black background
                 document.body.appendChild(renderer.domElement);
 
                 // Brighter lighting
-                const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+                const ambient = new THREE.AmbientLight(0xffffff, 1.2);
                 scene.add(ambient);
 
-                const directional = new THREE.DirectionalLight(0xffffff, 0.6);
+                const directional = new THREE.DirectionalLight(0xffffff, 1.0);
                 directional.position.set(0, 10, 5);
                 scene.add(directional);
 
@@ -355,8 +355,8 @@
                 const texture = obstacleTextures[obstacleType % obstacleTextures.length];
                 mat = new THREE.MeshStandardMaterial({
                     map: texture,
-                    emissive: 0x444444,
-                    emissiveIntensity: 0.7
+                    emissive: 0x222222,
+                    emissiveIntensity: 0.3
                 });
             } else {
                 // Fallback to colored materials - brighter
@@ -364,7 +364,7 @@
                 mat = new THREE.MeshStandardMaterial({
                     color: color,
                     emissive: color,
-                    emissiveIntensity: 0.4
+                    emissiveIntensity: 0.2
                 });
             }
             
